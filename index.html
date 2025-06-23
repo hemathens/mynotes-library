@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyNotes Library</title>
+  <meta name="theme-color" content="#3B82F6" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
+  <!-- 🌗 Theme Toggle Button -->
+  <div id="themeToggle">🌙</div>
+
+  <div class="container mx-auto px-4 py-6">
+    <!-- Auth Section -->
+    <div id="authSection" class="flex justify-between items-center mb-4">
+      <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        🔐 Sign in with Google
+      </button>
+      <div id="userInfo" class="hidden text-sm">
+        <span id="userEmail" class="mr-3 font-medium"></span>
+        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+      </div>
+    </div>
+
+    <h1 class="text-3xl font-bold text-center mb-6">📚 MyNotes Library</h1>
+
+    <!-- Note Form -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 mb-6">
+      <h2 class="text-xl font-semibold mb-3">Add a New Note</h2>
+      <form id="noteForm" class="space-y-3">
+        <input type="text" id="title" placeholder="Note Title" required class="w-full p-2 border rounded" />
+        <textarea id="description" placeholder="Description" required class="w-full p-2 border rounded"></textarea>
+        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-2 border rounded" />
+        <input type="text" id="tags" placeholder="Tags (comma-separated)" class="w-full p-2 border rounded" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          Save Note
+        </button>
+        <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-3 hidden">
+          <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Search + Notes -->
+    <div class="mb-6">
+      <input type="text" id="searchInput" placeholder="Search notes..." class="w-full p-2 border rounded" />
+    </div>
+
+    <div>
+      <h2 class="text-xl font-semibold mb-3">📄 Your Notes</h2>
+      <div id="notesContainer" class="space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK Setup -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+    import {
+      getFirestore, collection, addDoc, getDocs,
+      query, orderBy, doc, deleteDoc, where
+    } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import {
+      getAuth, signInWithPopup, GoogleAuthProvider,
+      onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDwHXxaMt_AtH78moae7_tvB5wrtXq50Lc",
+      authDomain: "mynoteslibrary-a895f.firebaseapp.com",
+      projectId: "mynoteslibrary-a895f",
+      storageBucket: "mynoteslibrary-a895f.appspot.com",
+      messagingSenderId: "925274518924",
+      appId: "1:925274518924:web:ecc44bd4b892759dacd2a9",
+      measurementId: "G-MHJVRWMTDE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.db = db;
+    window.auth = auth;
+    window.provider = provider;
+    window.signInWithPopup = signInWithPopup;
+    window.signOut = signOut;
+    window.onAuthStateChanged = onAuthStateChanged;
+    window.firestoreCollection = collection;
+    window.firestoreAddDoc = addDoc;
+    window.firestoreGetDocs = getDocs;
+    window.firestoreQuery = query;
+    window.firestoreOrderBy = orderBy;
+    window.firestoreWhere = where;
+    window.firestoreDoc = doc;
+    window.firestoreDeleteDoc = deleteDoc;
+  </script>
+
+  <!-- Main App Logic -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
